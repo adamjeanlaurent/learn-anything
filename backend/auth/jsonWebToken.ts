@@ -26,6 +26,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     });
 }
 
+// authenticates user information with DB, if correct returns a new json web token
 export const createNewToken = async (userName: string, userPasswordPlaintext: string): Promise<string> => {
     
     try {
