@@ -33,7 +33,7 @@ export const createNewToken = async (userName: string, userPasswordPlaintext: st
         // get user from DB
         const findUserQuery: string = `SELECT * FROM USER WHERE userName = '${userName}'`;
         const [foundUser] = await connection.query(findUserQuery) as any;
-
+        
         // if user not found
         if(foundUser.length === 0) return '';
         
@@ -44,7 +44,7 @@ export const createNewToken = async (userName: string, userPasswordPlaintext: st
         
         if(!passwordsMatch) return '';
         
-        const accessToken: string = jwt.sign({ userID: user.userID }, _CONFIG.AUTH.ACCESS_TOKEN_SECRET!);
+        const accessToken: string = jwt.sign({ userID: user.userID, userName: userName }, _CONFIG.AUTH.ACCESS_TOKEN_SECRET!);
 
         return accessToken;
     }

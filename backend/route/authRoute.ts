@@ -42,10 +42,11 @@ router.post('/login/:username/:password', async (req: Request, res: Response, ne
     if(username.length === 0) error.errors.push('provide a username');
     if(password.length === 0) error.errors.push('provide a password');
     if(error.errors.length !== 0) return res.send(error);
-
+    
     try {
+        // create json web token
         const token = await createNewToken(username, password);
-
+        
         if(token === '') {
             error.errors.push('invalid username or password');
             return res.send(error);
@@ -58,3 +59,5 @@ router.post('/login/:username/:password', async (req: Request, res: Response, ne
         next(err.message);
     }
 });
+
+export default router;

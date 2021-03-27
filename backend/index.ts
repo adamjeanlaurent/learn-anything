@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 
 // local
+import authRoute from './route/authRoute';
 
 // setup express
 const PORT = process.env.PORT;
@@ -34,6 +35,7 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // routes
+app.use('/api/auth', authRoute);
 
 // app listener
 app.listen(PORT || 3000, () => {
