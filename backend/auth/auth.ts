@@ -41,7 +41,7 @@ export const createNewToken = async (userName: string, userPasswordPlaintext: st
         const user = foundUser[0];
         const hashedPwdFromDb: string = user.pass;
         const passwordsMatch: boolean = comparePasswords(userPasswordPlaintext, hashedPwdFromDb);
-
+        
         if(!passwordsMatch) return '';
         
         const accessToken: string = jwt.sign({ userID: user.userID }, _CONFIG.AUTH.ACCESS_TOKEN_SECRET!);
@@ -59,13 +59,13 @@ export const registerUser = async (
     userName: string, 
     email: string,
     userPasswordPlaintext: string
-    ): Promise<'success' | 'username taken'> => {
+    ): Promise<'success' | 'username or email taken'> => {
         try {
              // check if username or email exists already
             const userNameOrEmailExistsQuery = `SELECT * FROM USER WHERE userName = '${userName}' OR email = '${email}'`;
             const [foundUser] = await connection.query(userNameOrEmailExistsQuery) as any;
             
-            if(foundUser.length !== 0) return 'username taken';
+            if(foundUser.length !== 0) return 'username or email taken';
 
             // hash passwords
             const hashedPassword = await getNewHash(userPasswordPlaintext);
