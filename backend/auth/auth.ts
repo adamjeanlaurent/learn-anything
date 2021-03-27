@@ -2,13 +2,13 @@ import { NextFunction , Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import connection from '../db/connection';
 import _CONFIG from '../util/config';
-import { comparePasswords } from './bcrypt';
+import { comparePasswords, getNewHash } from './bcrypt';
 
 // middleware that authenticates a json web token
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     // get auth header
     const authHeader: string | undefined = req.headers['authorization'];
-
+    
     // parse header for token 
     const token: string | undefined = authHeader && authHeader.split(' ')[1];
 
@@ -36,10 +36,10 @@ export const createNewToken = async (userName: string, userPasswordPlaintext: st
 
         // if user not found
         if(foundUser.length === 0) return '';
-
+        
         // compare passwords
         const user = foundUser[0];
-        const hashedPwdFromDb = user.pass;
+        const hashedPwdFromDb: string = user.pass;
         const passwordsMatch: boolean = comparePasswords(userPasswordPlaintext, hashedPwdFromDb);
 
         if(!passwordsMatch) return '';
@@ -49,7 +49,35 @@ export const createNewToken = async (userName: string, userPasswordPlaintext: st
         return accessToken;
     }
 
-    catch {
-        throw new Error('DB error');
+    catch(error) {
+        throw new Error(error.message);
     }
+}
+
+// registers new user
+export const registerUser = async (
+    userName: string, 
+    email: string,
+    userPasswordPlaintext: string
+    ): Promise<'success' | 'username taken'> => {
+        try {
+             // check if username or email exists already
+            const userNameOrEmailExistsQuery = `SELECT * FROM USER WHERE userName = '${userName}' OR email = '${email}'`;
+            const [foundUser] = await connection.query(userNameOrEmailExistsQuery) as any;
+            
+            if(foundUser.length !== 0) return 'username taken';
+
+            // hash passwords
+            const hashedPassword = await getNewHash(userPasswordPlaintext);
+
+            // insert user into DB
+            const insertNewUserQuery = `INSERT INTO USER(userName, email, pass) VALUES('${userName}','${email}','${hashedPassword}')`;
+            await connection.query(insertNewUserQuery);
+        
+            return 'success';
+        }
+       
+        catch(error) {
+            throw new Error(error.message);
+        }   
 }
