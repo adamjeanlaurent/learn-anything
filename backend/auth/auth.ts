@@ -11,7 +11,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     
     // parse header for token 
     const token: string | undefined = authHeader && authHeader.split(' ')[1];
-
+    
     if(!token) {
         return res.sendStatus(403);
     }

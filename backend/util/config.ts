@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// are we in a production or developement environment
+// are we in a production environment
 const __PROD__: boolean = (process.env.NODE_ENV === 'production');
 
 const _CONFIG = {
@@ -14,7 +14,8 @@ const _CONFIG = {
     },
     AUTH: {
         ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET
-    }
+    },
+    ENV: process.env.NODE_ENV
 }
 
 export default _CONFIG;
