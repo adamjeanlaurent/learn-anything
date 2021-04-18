@@ -9,6 +9,7 @@ import morgan from 'morgan';
 // local
 import authRoute from './route/authRoute';
 import testRoute from './route/testRoute';
+import roadmapRoute from './route/roadmapRoute';
 
 // setup express
 const PORT = process.env.PORT;
@@ -20,6 +21,7 @@ dotenv.config({ path:'../env' });
 app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
+app.use(express.json());
 
 // error handler
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
@@ -38,6 +40,7 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 // routes
 app.use('/api/auth', authRoute);
 app.use('/api/test', testRoute);
+app.use('/api/roadmap', roadmapRoute);
 
 // app listener
 app.listen(PORT || 3000, () => {

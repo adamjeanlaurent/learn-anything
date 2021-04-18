@@ -4,7 +4,7 @@ import { authenticateToken } from '../auth/auth';
 
 const router: Router = Router();
 
-router.post('/testToken', authenticateToken, (req, res, next) => {
+router.post('/testToken', authenticateToken, (req: Request, res: Response, next: NextFunction) => {
     res.send(req.user);
 }); 
 

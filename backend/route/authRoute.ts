@@ -6,8 +6,8 @@ import { registerUser, createNewToken } from '../auth/auth';
 
 const router: Router = Router();
 
-router.post('/signup/:username/:email/:password', async (req: Request, res: Response, next: NextFunction) => {
-    const { username, email, password } = req.params;
+router.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+    const { username, email, password } = req.body;
 
     // check for errors in user input
     let error: ErrorResponse = { errors: [] };
@@ -34,8 +34,8 @@ router.post('/signup/:username/:email/:password', async (req: Request, res: Resp
     }
 });
 
-router.post('/login/:username/:password', async (req: Request, res: Response, next: NextFunction) => {
-    const { username, password } = req.params;
+router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    const { username, password } = req.body;
 
     // check for errors in user input
     let error: ErrorResponse = { errors: [] };

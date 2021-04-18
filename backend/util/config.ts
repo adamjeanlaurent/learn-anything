@@ -14,8 +14,7 @@ const _CONFIG = {
     },
     AUTH: {
         ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET
-    },
-    ENV: process.env.NODE_ENV
+    }
 }
 
 export default _CONFIG;

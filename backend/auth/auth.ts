@@ -44,7 +44,13 @@ export const createNewToken = async (userName: string, userPasswordPlaintext: st
         
         if(!passwordsMatch) return '';
         
-        const accessToken: string = jwt.sign({ userID: user.userID, userName: userName }, _CONFIG.AUTH.ACCESS_TOKEN_SECRET!);
+        const accessToken: string = jwt.sign(
+            { 
+                userID: user.userID,
+                userName: userName 
+            }, 
+            _CONFIG.AUTH.ACCESS_TOKEN_SECRET!
+        );
 
         return accessToken;
     }
